@@ -10,6 +10,8 @@ import torch
 import gzip
 import torch.nn.functional as F
 from torch import nn
+from torch import optim
+
 
 loss_func = F.cross_entropy
 
@@ -30,6 +32,10 @@ def read_mnist(path):
     return x_train, y_train, x_valid, y_valid
 
 
+def configure_optimizer(model: nn.Module) -> optim.Optimizer:
+    return optim.Adam(model.parameters(), lr=3e-4)
+
+
 def accuracy(out: torch.Tensor, yb: torch.Tensor) -> torch.Tensor:
     preds = torch.argmax(out, dim=1)
     return (preds == yb).float().mean()
@@ -38,11 +44,10 @@ def accuracy(out: torch.Tensor, yb: torch.Tensor) -> torch.Tensor:
 class MNISTLogistic(nn.Module):
     def __init__(self):
         super().__init__()
-        self.weights = nn.Parameter(torch.randn(784, 10) / math.sqrt(784))
-        self.bias = nn.Parameter(torch.zeros(10))
+        self.lin = nn.Linear(784, 10)
 
     def forward(self, xb: torch.Tensor) -> torch.Tensor:
-        return xb @ self.weights + self.bias
+        return self.lin(xb)
 
 
 def fit(X, y, epochs, lr, bs):

@@ -9,6 +9,11 @@ torchvision = "*"
 torchaudio = "*"
 wandb = "*"
 pillow = "*"
+pytorch-lightning = "*"
+smart-open = "*"
+boltons = "*"
+defusedxml = "*"
+toml = "*"
 
 [dev-packages]
 
